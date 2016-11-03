@@ -49,5 +49,5 @@ dependencies:
 #        - cp -r app/build/outputs $CIRCLE_ARTIFACTS
 
 test:
-  overrise:
+  override:
     - ChangeTextBehaviorTest
