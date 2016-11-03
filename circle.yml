@@ -11,31 +11,39 @@ machine:
         ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
-    override:
+    pre:
         - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-24.0.3,android-24,extra-google-m2repository,extra-google-google_play_services,extra-android-support
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+    cache_directories:
+        - /usr/local/android-sdk-linux/tools
+        - /usr/local/android-sdk-linux/build-tools/24.0.3
 
 #test:
 #    override:
 #        - (./gradlew assemble):
 #            timeout: 360
 
+#test:
+#  override:
+#    # start the emulator
+#    - emulator -avd circleci-android22 -no-audio -no-window:
+#        background: true
+#        parallel: true
+#    # wait for it to have booted
+#    - circle-android wait-for-boot
+#    # unlock the emulator screen
+#    - sleep 30
+#    - adb shell input keyevent 82
+#    # run tests  against the emulator.
+#    # http://stackoverflow.com/questions/31713525/what-are-list-of-tasks-thats-connectedandroidtest-executes
+#    - ./gradlew connectedAndroidTest -PdisablePreDex
+#    # copy the build outputs to artifacts
+#    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+#    # copy the test results to the test results directory.
+#    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+
 test:
-  override:
-    # start the emulator
-    - emulator -avd circleci-android22 -no-audio -no-window:
-        background: true
-        parallel: true
-    # wait for it to have booted
-    - circle-android wait-for-boot
-    # unlock the emulator screen
-    - sleep 30
-    - adb shell input keyevent 82
-    # run tests  against the emulator.
-    # http://stackoverflow.com/questions/31713525/what-are-list-of-tasks-thats-connectedandroidtest-executes
-    - ./gradlew connectedAndroidTest -PdisablePreDex
-    # copy the build outputs to artifacts
-    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
-    # copy the test results to the test results directory.
-    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    override:
+        - ./gradlew assemble
+        - cp -r app/build/outputs $CIRCLE_ARTIFACTS
