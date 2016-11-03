@@ -33,6 +33,7 @@ test:
     - sleep 30
     - adb shell input keyevent 82
     # run tests  against the emulator.
+    # http://stackoverflow.com/questions/31713525/what-are-list-of-tasks-thats-connectedandroidtest-executes
     - ./gradlew connectedAndroidTest -PdisablePreDex
     # copy the build outputs to artifacts
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
