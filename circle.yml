@@ -11,9 +11,8 @@ machine:
         ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
-    pre:
-        - ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --all --filter "tools,platform-tools,android-24,extra-google-m2repository,extra-android-m2repository,extra-android-support"
-        - echo y | android update sdk --no-ui --all --filter "build-tools-24.2.1"
+    override:
+        - echo yes | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-24.2.1,android-24,extra-google-m2repository,extra-google-google_play_services,extra-android-support
         - chmod +x gradlew
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
